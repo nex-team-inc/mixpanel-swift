@@ -28,6 +28,7 @@ class Persistence {
     enum ArchiveType: String {
         case events
         case people
+        case groups
         case properties
         case codelessBindings
         case variants
@@ -58,12 +59,14 @@ class Persistence {
     #if DECIDE
     class func archive(eventsQueue: Queue,
                        peopleQueue: Queue,
+                       groupsQueue: Queue,
                        properties: ArchivedProperties,
                        codelessBindings: Set<CodelessBinding>,
                        variants: Set<Variant>,
                        token: String) {
         archiveEvents(eventsQueue, token: token)
         archivePeople(peopleQueue, token: token)
+        archiveGroups(groupsQueue, token: token)
         archiveProperties(properties, token: token)
         archiveVariants(variants, token: token)
         archiveCodelessBindings(codelessBindings, token: token)
@@ -71,10 +74,12 @@ class Persistence {
     #else
     class func archive(eventsQueue: Queue,
                        peopleQueue: Queue,
+                       groupsQueue: Queue,
                        properties: ArchivedProperties,
                        token: String) {
         archiveEvents(eventsQueue, token: token)
         archivePeople(peopleQueue, token: token)
+        archiveGroups(groupsQueue, token: token)
         archiveProperties(properties, token: token)
     }
     #endif // DECIDE
@@ -88,6 +93,12 @@ class Persistence {
     class func archivePeople(_ peopleQueue: Queue, token: String) {
         objc_sync_enter(self)
         archiveToFile(.people, object: peopleQueue, token: token)
+        objc_sync_exit(self)
+    }
+
+    class func archiveGroups(_ groupsQueue: Queue, token: String) {
+        objc_sync_enter(self)
+        archiveToFile(.groups, object: groupsQueue, token: token)
         objc_sync_exit(self)
     }
 
@@ -158,6 +169,7 @@ class Persistence {
     #if DECIDE
     class func unarchive(token: String) -> (eventsQueue: Queue,
                                             peopleQueue: Queue,
+                                            groupsQueue: Queue,
                                             superProperties: InternalProperties,
                                             timedEvents: InternalProperties,
                                             distinctId: String,
@@ -173,6 +185,7 @@ class Persistence {
                                             automaticEventsEnabled: Bool?) {
         let eventsQueue = unarchiveEvents(token: token)
         let peopleQueue = unarchivePeople(token: token)
+        let groupsQueue = unarchiveGroups(token: token)
         let codelessBindings = unarchiveCodelessBindings(token: token)
         let variants = unarchiveVariants(token: token)
         let optOutStatus = unarchiveOptOutStatus(token: token)
@@ -190,6 +203,7 @@ class Persistence {
 
         return (eventsQueue,
                 peopleQueue,
+                groupsQueue,
                 superProperties,
                 timedEvents,
                 distinctId,
@@ -207,6 +221,7 @@ class Persistence {
     #else
     class func unarchive(token: String) -> (eventsQueue: Queue,
                                             peopleQueue: Queue,
+                                            groupsQueue: Queue,
                                             superProperties: InternalProperties,
                                             timedEvents: InternalProperties,
                                             distinctId: String,
@@ -217,6 +232,7 @@ class Persistence {
                                             peopleUnidentifiedQueue: Queue) {
             let eventsQueue = unarchiveEvents(token: token)
             let peopleQueue = unarchivePeople(token: token)
+            let groupsQueue = unarchiveGroups(token: token)
 
             let (superProperties,
                 timedEvents,
@@ -230,6 +246,7 @@ class Persistence {
 
             return (eventsQueue,
                     peopleQueue,
+                    groupsQueue,
                     superProperties,
                     timedEvents,
                     distinctId,
@@ -271,6 +288,11 @@ class Persistence {
 
     class private func unarchivePeople(token: String) -> Queue {
         let data = unarchiveWithType(.people, token: token)
+        return data as? Queue ?? []
+    }
+
+    class private func unarchiveGroups(token: String) -> Queue {
+        let data = unarchiveWithType(.groups, token: token)
         return data as? Queue ?? []
     }
 
