@@ -56,7 +56,7 @@ class Variant: NSObject, NSCoding {
         self.finished = false
         super.init()
         addActions(JSONObject: actions)
-        addTweaks(JSONObject: tweaks)
+        addTweaks(JSONObject: tweaks, execute: true)
     }
 
     required init?(coder aDecoder: NSCoder) {
