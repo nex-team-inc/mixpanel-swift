@@ -459,6 +459,7 @@ open class MixpanelInstance: CustomDebugStringConvertible, FlushDelegate, AEDele
     #endif // !os(OSX)
 
     @objc private func applicationDidBecomeActive(_ notification: Notification) {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         flushInstance.applicationDidBecomeActive()
         #if DECIDE
             if checkForVariantsOnActive || checkForNotificationOnActive {
@@ -1430,7 +1431,9 @@ extension MixpanelInstance: InAppNotificationsDelegate {
     }
 
     func executeCachedVariants() {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         for variant in decideInstance.ABTestingInstance.variants {
+            print("MP-ABTest-Debug: cached variant - \(variant.ID)-exp\(variant.experimentID)")
             variant.execute()
         }
     }
@@ -1460,6 +1463,7 @@ extension MixpanelInstance: InAppNotificationsDelegate {
      - parameter callback:  Optional callback for after the experiments have been loaded and applied
      */
     open func joinExperiments(callback: (() -> Void)? = nil) {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         checkForVariants { newVariants in
             guard let newVariants = newVariants else {
                 return
