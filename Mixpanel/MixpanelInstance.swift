@@ -459,10 +459,10 @@ open class MixpanelInstance: CustomDebugStringConvertible, FlushDelegate, AEDele
     #endif // !os(OSX)
 
     @objc private func applicationDidBecomeActive(_ notification: Notification) {
-        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         flushInstance.applicationDidBecomeActive()
         #if DECIDE
             if checkForVariantsOnActive || checkForNotificationOnActive {
+                print("MP-ABTest-Debug: \(#function), line: \(#line)")
                 checkDecide { decideResponse in
                     if let decideResponse = decideResponse {
                         DispatchQueue.main.sync {

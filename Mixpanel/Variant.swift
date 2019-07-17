@@ -119,8 +119,8 @@ class Variant: NSObject, NSCoding {
     }
 
     func execute() {
-        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         if !running && !finished {
+            print("MP-ABTest-Debug: \(#function), line: \(#line)")
             executeTweaks()
             for action in actions {
                 guard let action = action as? VariantAction else {
@@ -133,8 +133,8 @@ class Variant: NSObject, NSCoding {
     }
 
     func executeTweaks() {
-        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         if !finished {
+            print("MP-ABTest-Debug: \(#function), line: \(#line)")
             for tweak in tweaks {
                 tweak.execute()
             }
