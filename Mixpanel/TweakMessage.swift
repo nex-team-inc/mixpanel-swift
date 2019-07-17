@@ -18,6 +18,7 @@ class TweakRequest: BaseWebSocketMessage {
     }
 
     override func responseCommand(connection: WebSocketWrapper) -> Operation? {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         let operation = BlockOperation { [weak connection] in
             guard let connection = connection else {
                 return

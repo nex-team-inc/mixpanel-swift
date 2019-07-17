@@ -55,7 +55,7 @@ class VariantTweak: NSObject, NSCoding {
         guard let tweak = MixpanelTweaks.defaultStore.tweakCollections["Mixpanel"]?.tweakGroups["Mixpanel"]?.tweaks[name] else {
             return
         }
-
+        print("MP-ABTest-Debug: saving tweaks to disk thru variant execute")
         let currentViewData = MixpanelTweaks.defaultStore.currentViewDataForTweak(tweak)
         let tweakViewData = createViewDataType(value: value, viewData: currentViewData)
         MixpanelTweaks.defaultStore.setValue(tweakViewData, forTweak: tweak)

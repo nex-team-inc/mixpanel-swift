@@ -47,6 +47,7 @@ class Variant: NSObject, NSCoding {
     }
 
     init(ID: Int, experimentID: Int, actions: [[String: Any]], tweaks: [[String: Any]]) {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         self.ID = ID
         self.experimentID = experimentID
         self.actions = NSMutableOrderedSet()
@@ -106,6 +107,7 @@ class Variant: NSObject, NSCoding {
     }
 
     func addTweaks(JSONObject: [[String: Any]], execute: Bool = false) {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         for object in JSONObject {
             if let tweak = VariantTweak(JSONObject: object) {
                 tweaks.append(tweak)
@@ -117,6 +119,7 @@ class Variant: NSObject, NSCoding {
     }
 
     func execute() {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         if !running && !finished {
             executeTweaks()
             for action in actions {
@@ -130,6 +133,7 @@ class Variant: NSObject, NSCoding {
     }
 
     func executeTweaks() {
+        print("MP-ABTest-Debug: \(#function), line: \(#line)")
         if !finished {
             for tweak in tweaks {
                 tweak.execute()
@@ -144,6 +148,7 @@ class Variant: NSObject, NSCoding {
             }
             action.stop()
         }
+        print("MP-ABTest-Debug: saving tweaks to disk thru variant stop")
         for tweak in tweaks {
             tweak.stop()
         }
