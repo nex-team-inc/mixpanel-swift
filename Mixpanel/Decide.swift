@@ -120,10 +120,15 @@ class Decide {
                 } else {
                     Logger.debug(message: "variants check response format error")
                 }
+                print("MP-ABTest-Debug: Fetched \(parsedVariants.count) variants - \(parsedVariants.map { "\($0.ID)-exp\($0.experimentID)" })")
 
                 let runningVariants = Set(self.ABTestingInstance.variants.filter { return $0.running })
+                print("MP-ABTest-Debug: Running \(runningVariants.count) variants - \(runningVariants.map { "\($0.ID)-exp\($0.experimentID)" })")
+
                 decideResponse.toFinishVariants = runningVariants.subtracting(parsedVariants)
                 let newVariants = parsedVariants.subtracting(runningVariants)
+                print("MP-ABTest-Debug: New incoming \(newVariants.count) variants - \(newVariants.map { "\($0.ID)-exp\($0.experimentID)" })")
+
                 decideResponse.newVariants = newVariants
                 self.ABTestingInstance.variants = newVariants.union(runningVariants)
 

@@ -129,6 +129,7 @@ public final class TweakStore {
 
 	internal func currentValueForTweak<T>(_ tweak: Tweak<T>) -> T {
 		if allTweaks.contains(AnyTweak(tweak: tweak)) {
+            print("MP-ABTest-Debug: current value for tweak \(tweak.tweakName) - \(persistence.currentValueForTweak(tweak) ?? tweak.defaultValue). Using default - \(persistence.currentValueForTweak(tweak) == nil ? "true" : "false")")
 			return enabled ? persistence.currentValueForTweak(tweak) ?? tweak.defaultValue : tweak.defaultValue
 		} else {
             Logger.error(message: "Error: the tweak \"\(tweak.tweakIdentifier)\" isn't included in the tweak store \"\(storeName)\"." +

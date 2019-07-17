@@ -49,6 +49,7 @@ internal final class TweakPersistency {
 
 	internal func setValue(_ value: TweakableType?, forTweakIdentifiable tweakID: TweakIdentifiable) {
 		tweakCache[tweakID.persistenceIdentifier] = value
+        print("MP-ABTest-Debug: saving tweaks to disk.")
 		self.diskPersistency.saveToDisk(tweakCache)
 	}
 
