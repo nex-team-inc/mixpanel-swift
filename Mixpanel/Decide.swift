@@ -114,6 +114,7 @@ class Decide {
                 if let rawVariants = result["variants"] as? [[String: Any]] {
                     for rawVariant in rawVariants {
                         if let variant = Variant(JSONObject: rawVariant) {
+                            print("Carson-variants: \(variant.ID)-exp\(variant.experimentID)")
                             parsedVariants.insert(variant)
                         }
                     }
